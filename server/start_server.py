@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3.6
 import select, os, socket, sys, ssl # Imports all from module socket.
-from user import User
+from user_object import User
 #'pip3.6 install passlib' on server running server code. This library is used in 'user.py'.
 #Defines server address and port.
 host = 'localhost'  #'localhost' or '127.0.0.1' or '' are all equivalent.
@@ -34,9 +34,9 @@ try:
                 #print("accepted")
                 encrypted = ssl.wrap_socket(conn,
                              server_side=True,
-                             certfile="server.crt",
-                             keyfile="server.key")
-                
+                             certfile="security/server.crt",
+                             keyfile="security/server.key")
+
                 #Create a user object.
                 userobj = User()
                 #Set user object variables.
@@ -45,10 +45,10 @@ try:
                 #Do not verify user or make new user here.
                 #That would only works if thread is sitting and waiting.
                 connection_list.append(userobj) # Instead make a verified and unvarified connections toggle.
-                
-            
+
+
             else: #it isnt listening sock so it breaks the connection currently
-                
+
                 msg = current_sock.read() #trigger happy read post_message() called multiple times
                 print("msg=")
                 print(msg)
@@ -85,7 +85,7 @@ try:
                     if(current_sock._verified == 1 and current_sock._order_number == 4 and msg == "postfile"):
                         #print("msg is part of a file")
                         current_sock._action = "postfile"
-                        
+
                     if(current_sock._verified == 1 and current_sock._order_number == 4 and msg == "getfile"):
                         print("asking for a file")
                         current_sock._action = "getfile"
@@ -95,8 +95,8 @@ try:
                         except:
                             current_sock.fileexcept()
                             print("nofilefound")
-                    
-                    
+
+
                     if(current_sock._verified == 1 and current_sock._order_number >= 5 and current_sock._action == "getconvo"
                     ):
                         if msg.encode('utf-8') is not b'':
@@ -132,15 +132,15 @@ try:
                     current_sock._encrypted.close()
                     current_sock._conn.close()
                     connection_list.remove(current_sock)
-                    
-        
+
+
         for current_sock in error_sockets: # close error sockets
             current_sock._encrypted.close()
             current_sock._conn.close()
             connection_list.remove(current_sock)
 
 
-                
+
 
 except KeyboardInterrupt:
     #time.sleep(20)
