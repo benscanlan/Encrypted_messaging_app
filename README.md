@@ -2,7 +2,7 @@
 
 
 
-
+![Benchmark Img](https://github.com/benscanlan/Encrypted_messaging_app/blob/master/presentation.png?raw=true)
 
 
 
